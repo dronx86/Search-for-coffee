@@ -1,2 +1,4 @@
 __pycache__/
 .env
+venv/
+sources/coffee_map.html

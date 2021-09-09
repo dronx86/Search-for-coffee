@@ -5,7 +5,7 @@ from os.path import join, dirname
 from dotenv import load_dotenv
 import requests
 from geopy.distance import distance
-from flask import Flask, render_template
+from flask import Flask
 
 
 def fetch_coordinates(apikey, address):
@@ -32,18 +32,17 @@ def get_house_dist(house):
 
 
 def draw_map(user_place, user_coords, nearest_houses):
-    coffee_map = folium.Map(location=list(user_coords),
-                            zoom_start=13, tiles=user_place, attr="attr")
+    coffee_map = folium.Map(location=list(user_coords))
     tooltip = "Check me!"
     for coffee_house in nearest_houses:
         folium.Marker([coffee_house["latitude"], coffee_house["longitude"]],
                       popup=f"<i>{coffee_house['title']}</i>",
                       tooltip=tooltip).add_to(coffee_map)
-    coffee_map.save("coffee_map.html")
+    coffee_map.save(join("sources", "coffee_map.html"))
 
 
 def return_map():
-    with open("coffee_map.html") as map:
+    with open(join("sources", "coffee_map.html")) as map:
         return map.read()
 
 
@@ -69,8 +68,8 @@ def main():
             coffee_house["geoData"]["coordinates"][0]
         dist_to_house = distance(user_coords, house_coords).km
         one_house_information["distance"] = dist_to_house
-        one_house_information["latitude"] = house_coords[1]
-        one_house_information["longitude"] = house_coords[0]
+        one_house_information["latitude"] = house_coords[0]
+        one_house_information["longitude"] = house_coords[1]
         usefull_information.append(one_house_information)
 
     nearest_houses = sorted(usefull_information, key=get_house_dist)[:5]
