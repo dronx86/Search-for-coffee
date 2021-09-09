@@ -52,7 +52,7 @@ def main():
     load_dotenv(dotenv_path)
     apikey = os.getenv("GEODATA_KEY")
 
-    with open("coffee.json", "r", encoding="CP1251") as file:
+    with open(join("sources", "coffee.json"), "r", encoding="CP1251") as file:
         coffee_houses_json = file.read()
 
     coffee_houses = json.loads(coffee_houses_json)
